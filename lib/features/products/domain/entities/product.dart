@@ -7,6 +7,7 @@ class ProductEntity extends Equatable {
   final String? currencyCode;
   final String? image;
   final String? id;
+  final int? quantity;
 
   const ProductEntity({
     this.createdAt,
@@ -15,6 +16,7 @@ class ProductEntity extends Equatable {
     this.currencyCode,
     this.image,
     this.id,
+    this.quantity,
   });
 
   @override
@@ -26,6 +28,7 @@ class ProductEntity extends Equatable {
       currencyCode,
       image,
       id,
+      quantity,
     ];
   }
 }

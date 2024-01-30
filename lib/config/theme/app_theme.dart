@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hova_ai/core/constants/constants.dart';
 
 ThemeData theme() {
   return ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: scaffoldBgColor,
     appBarTheme: appBarTheme(),
   );
 }
 
 AppBarTheme appBarTheme() {
   return const AppBarTheme(
-    color: Color(0xFF581845),
+    color: scaffoldBgColor,
     elevation: 0,
     centerTitle: true,
     iconTheme: IconThemeData(

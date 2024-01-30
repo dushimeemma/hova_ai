@@ -8,6 +8,7 @@ class ProductModel extends ProductEntity {
     String? currencyCode,
     String? image,
     String? id,
+    int? quantity,
   }) : super(
           createdAt: createdAt,
           name: name,
@@ -15,6 +16,7 @@ class ProductModel extends ProductEntity {
           currencyCode: currencyCode,
           image: image,
           id: id,
+          quantity: quantity,
         );
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
@@ -24,6 +26,7 @@ class ProductModel extends ProductEntity {
       currencyCode: json['currencyCode'] ?? '',
       image: json['image'] ?? '',
       id: json['id'] ?? '',
+      quantity: json['quantity'] ?? '',
     );
   }
 }
