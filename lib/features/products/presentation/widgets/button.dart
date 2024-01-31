@@ -2,25 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:hova_ai/core/constants/constants.dart';
 
 class RoundedButton extends StatelessWidget {
+  final void Function()? onTap;
+  final Widget? child;
+  final Color? bgColor;
+  final double? width;
+  final double? height;
   const RoundedButton({
     super.key,
+    this.onTap,
+    this.child,
+    this.bgColor,
+    this.width,
+    this.height,
   });
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: null,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(40.0, 40.0),
-        foregroundColor: scaffoldBgColor,
-        backgroundColor: Colors.white,
-        side: const BorderSide(color: scaffoldBgColor, width: 1.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width ?? 40,
+        height: height ?? 40,
+        decoration: BoxDecoration(
+          color: bgColor ?? Colors.white,
+          border: Border.all(
+            color: scaffoldBgColor,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(8),
         ),
-      ),
-      child: const Icon(
-        Icons.more_horiz,
-        size: 24,
+        child: Center(
+          child: child ??
+              const Icon(
+                Icons.more_horiz,
+                size: 24,
+              ),
+        ),
       ),
     );
   }
