@@ -20,6 +20,7 @@ dependencies:
   retrofit: ^4.0.3
   flutter_hooks: ^0.20.4
   dio: ^5.4.0
+  hovering: ^1.0.4
 
 dev_dependencies:
   flutter_test:

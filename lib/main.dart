@@ -17,12 +17,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return BlocProvider<ProductsBloc>(
       create: (context) => sl()..add(const GetProducts()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const Products(),
-        theme: theme(),
+        theme: theme(width: width),
       ),
     );
   }

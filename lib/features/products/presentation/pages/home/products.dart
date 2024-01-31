@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hova_ai/core/constants/constants.dart';
+import 'package:hova_ai/core/helpers/helpers.dart';
 import 'package:hova_ai/features/products/presentation/bloc/product_bloc.dart';
 import 'package:hova_ai/features/products/presentation/bloc/product_state.dart';
 import 'package:hova_ai/features/products/presentation/widgets/card.dart';
 import 'package:hova_ai/features/products/presentation/widgets/cart.dart';
 import 'package:hova_ai/features/products/presentation/widgets/search_field.dart';
+import 'package:hovering/hovering.dart';
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -17,21 +20,39 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   int _currentIndex = 1;
+  bool isHovered = false;
   void setCurrentIndex(index) {
     setState(() {
       _currentIndex = index;
     });
   }
 
+  void onHover(event) {
+    setState(() {
+      isHovered = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigation(
-        currentIndex: _currentIndex,
-        onTap: setCurrentIndex,
-      ),
+      appBar: !HelperMethods.isDeskTop(width: width) ? _buildAppBar() : null,
+      body: !HelperMethods.isDeskTop(width: width)
+          ? _buildMobileBody()
+          : _buildDeskTopBody(
+              width: width,
+              height: height,
+              onHover: onHover,
+              isHovered: isHovered,
+            ),
+      bottomNavigationBar: !HelperMethods.isDeskTop(width: width)
+          ? _buildBottomNavigation(
+              currentIndex: _currentIndex,
+              onTap: setCurrentIndex,
+            )
+          : null,
     );
   }
 }
@@ -75,28 +96,13 @@ _buildBottomNavigation({
     selectedIconTheme: const IconThemeData(
       color: scaffoldBgColor,
     ),
-    items: const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home_outlined),
-        label: 'Home',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.assignment_outlined),
-        label: 'Transactions',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.inventory_outlined),
-        label: 'Inventory',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.person_outline),
-        label: 'Profile',
-      ),
-    ],
+    items: HelperMethods.getNavItems(
+      color: bottomNavigationColor,
+    ),
   );
 }
 
-_buildBody() {
+Widget _buildMobileBody() {
   return BlocBuilder<ProductsBloc, ProductState>(
     builder: (_, state) {
       if (state is ProductsLoadingState) {
@@ -137,6 +143,118 @@ _buildBody() {
       }
       return const SizedBox();
     },
+  );
+}
+
+Widget _buildLogo({
+  required double height,
+}) {
+  return Container(
+    width: double.infinity,
+    height: height * .1,
+    color: scaffoldBgColor,
+    alignment: Alignment.center,
+    child: Text(
+      'HOVASTORE'.toUpperCase(),
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
+Container _buildItemContainer({
+  required int index,
+  Color? color,
+}) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(12.0),
+    decoration: BoxDecoration(
+      color: color ?? deskTopBg,
+      border: const Border(
+        bottom: BorderSide(
+          color: bottomNavigationColor,
+          width: 1.0,
+        ),
+      ),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        HelperMethods.getNavItems()[index].icon,
+        Text(
+          HelperMethods.getNavItems()[index].label!.toUpperCase(),
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: bottomNavigationColor,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildNavItems({
+  void Function()? onTap,
+  required void Function(PointerEnterEvent) onHover,
+  required bool isHovered,
+}) {
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: HelperMethods.getNavItems().length,
+    itemBuilder: (BuildContext context, int index) {
+      return GestureDetector(
+        onTap: onTap,
+        child: HoverWidget(
+          hoverChild: _buildItemContainer(
+            index: index,
+            color: Colors.black,
+          ),
+          onHover: onHover,
+          child: _buildItemContainer(index: index),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildPoweredBy() {
+  return const Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Text(
+      'Powered by \n HOVA AI',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
+Widget _buildDeskTopBody({
+  required double width,
+  required double height,
+  required void Function(PointerEnterEvent) onHover,
+  required bool isHovered,
+}) {
+  return SizedBox(
+    width: width * 0.1,
+    height: height,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            _buildLogo(height: height),
+            _buildNavItems(onHover: onHover, isHovered: isHovered),
+          ],
+        ),
+        _buildPoweredBy(),
+      ],
+    ),
   );
 }
 

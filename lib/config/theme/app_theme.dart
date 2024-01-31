@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hova_ai/core/constants/constants.dart';
+import 'package:hova_ai/core/helpers/helpers.dart';
 
-ThemeData theme() {
+ThemeData theme({
+  required double width,
+}) {
   return ThemeData(
-    scaffoldBackgroundColor: scaffoldBgColor,
+    scaffoldBackgroundColor:
+        !HelperMethods.isDeskTop(width: width) ? scaffoldBgColor : deskTopBg,
     appBarTheme: appBarTheme(),
   );
 }
