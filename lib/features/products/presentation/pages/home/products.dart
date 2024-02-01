@@ -356,6 +356,48 @@ Widget _buildDeskTopAppBar({
   );
 }
 
+Widget _buildDashboardFistRow({
+  required double height,
+  required double width,
+}) {
+  return Container(
+    color: dashboardTransparentBg,
+    width: (width - (width * 0.1)) * 0.5,
+    height: height - (height * 0.1),
+    padding: const EdgeInsets.all(12),
+    child: Column(
+      children: <Widget>[
+        const SearchTextField(
+          showSuffix: false,
+          hint: 'Search by name / barcode',
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Expanded(
+          child: _buildMobileBody(
+            isDeskTop: true,
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+Widget _buildDashboardContent({
+  required double height,
+  required double width,
+}) {
+  return SizedBox(
+    width: double.infinity,
+    child: Row(
+      children: <Widget>[
+        _buildDashboardFistRow(height: height, width: width),
+      ],
+    ),
+  );
+}
+
 Widget _buildDesktopDashboard({
   required double width,
   required double height,
@@ -366,35 +408,7 @@ Widget _buildDesktopDashboard({
     child: Column(
       children: <Widget>[
         _buildDeskTopAppBar(height: height),
-        SizedBox(
-          width: double.infinity,
-          child: Row(
-            children: <Widget>[
-              Container(
-                color: dashboardTransparentBg,
-                width: (width - (width * 0.1)) * 0.5,
-                height: height - (height * 0.1),
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: <Widget>[
-                    const SearchTextField(
-                      showSuffix: false,
-                      hint: 'Search by name / barcode',
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Expanded(
-                      child: _buildMobileBody(
-                        isDeskTop: true,
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+        _buildDashboardContent(height: height, width: width),
       ],
     ),
   );
