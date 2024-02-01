@@ -9,3 +9,4 @@ const Color stockSuccessColor = Color(0xFF1a9c6c);
 const Color stockColorPrimary = Color(0xFF256fff);
 const Color bottomNavigationColor = Color(0xFF888888);
 const Color deskTopBg = Color(0xFF3f3d56);
+const Color dashboardTransparentBg = Color(0xFFf5f5f5);
