@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hova_ai/core/constants/constants.dart';
+import 'package:hova_ai/core/helpers/helpers.dart';
 import 'package:hova_ai/features/products/domain/entities/product.dart';
 import 'package:hova_ai/features/products/presentation/widgets/button.dart';
 
 class RoundedOutlineCard extends StatelessWidget {
   final ProductEntity product;
+  final double width;
   const RoundedOutlineCard({
     super.key,
     required this.product,
+    required this.width,
   });
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class RoundedOutlineCard extends StatelessWidget {
           _paddingWrapper(
             children: <Widget>[
               _buildRow(
+                width: width,
                 quantity: product.quantity!,
                 name: product.name!,
               ),
@@ -32,10 +36,11 @@ class RoundedOutlineCard extends StatelessWidget {
           ),
           _buildDivider(),
           _paddingWrapper(
-            padding: 12.0,
+            padding: (width > 1063 && width < 1437) ? 4.0 : 12.0,
             children: <Widget>[
               _buildTextPrice(product: product),
               _buildCart(
+                width: width,
                 quantity: product.quantity!,
                 isAddedToCart: product.quantity! == 25,
               ),
@@ -64,6 +69,7 @@ Text _buildTextColor({
 Widget _buildCart({
   required int quantity,
   bool isAddedToCart = false,
+  required double width,
 }) {
   if (isAddedToCart) {
     return _buildTextColor(label: 'Already added');
@@ -76,12 +82,14 @@ Widget _buildCart({
   }
   return RoundedButton(
     bgColor: scaffoldBgColor,
-    width: 124,
+    width: HelperMethods.isDeskTop(width: width) ? width * .05 : width * 0.25,
     child: Text(
       'add to cart'.toUpperCase(),
+      textAlign: TextAlign.center,
       style: const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
+        fontSize: 8,
       ),
     ),
   );
@@ -137,6 +145,7 @@ Container _buildQuantityContainer({
 Row _buildRow({
   required int quantity,
   required String name,
+  required double width,
 }) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -144,9 +153,18 @@ Row _buildRow({
     children: [
       _buildQuantityContainer(quantity: quantity),
       const SizedBox(width: 8.0),
-      Text(
-        name,
-        style: const TextStyle(fontSize: 16.0),
+      SizedBox(
+        width: width >= 1437
+            ? width * 0.14
+            : (width > 1024 && width < 1437)
+                ? width * 0.1
+                : width * 0.5,
+        child: Text(
+          name,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          style: const TextStyle(fontSize: 16.0),
+        ),
       ),
     ],
   );

@@ -42,7 +42,9 @@ class _ProductsState extends State<Products> {
     return Scaffold(
       appBar: !HelperMethods.isDeskTop(width: width) ? _buildAppBar() : null,
       body: !HelperMethods.isDeskTop(width: width)
-          ? _buildMobileBody()
+          ? _buildMobileBody(
+              width: width,
+            )
           : _buildDeskTopBody(
               width: width,
               height: height,
@@ -106,6 +108,7 @@ _buildBottomNavigation({
 
 Widget _buildMobileBody({
   bool isDeskTop = false,
+  required double width,
 }) {
   return BlocBuilder<ProductsBloc, ProductState>(
     builder: (_, state) {
@@ -133,12 +136,14 @@ Widget _buildMobileBody({
                   crossAxisCount: 2,
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
-                  childAspectRatio: (1 / .6),
+                  childAspectRatio:
+                      (width > 1024 && width <= 1140) ? (1 / .74) : (1 / .6),
                   shrinkWrap: true,
                   children: List.generate(
                     state.products!.length,
                     (index) {
                       return RoundedOutlineCard(
+                        width: width,
                         product: state.products![index],
                       );
                     },
@@ -152,6 +157,7 @@ Widget _buildMobileBody({
                         itemBuilder: (context, index) {
                           return RoundedOutlineCard(
                             product: state.products![index],
+                            width: width,
                           );
                         },
                         itemCount: state.products!.length,
@@ -377,6 +383,7 @@ Widget _buildDashboardFistRow({
         Expanded(
           child: _buildMobileBody(
             isDeskTop: true,
+            width: width,
           ),
         )
       ],

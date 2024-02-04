@@ -22,6 +22,5 @@ In this App I have used `CLEAN ARCHITECTURE DESIGN PATTERN`
 
 - I have integrated [a mockuped API](https://6534b04de1b6f4c59046dd1b.mockapi.io/api/v1/products) to get the list of products
 - Some UI are still work in progress
-- Responsiveness of `product card` is not well handled especially on `some tablet devices`
 
 ## Developed by [Emmanuel Dushime](https://www.linkedin.com/in/dushimeemma)

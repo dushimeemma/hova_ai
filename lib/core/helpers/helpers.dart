@@ -5,7 +5,7 @@ class HelperMethods {
   static bool isDeskTop({
     required double width,
   }) {
-    if (width > 600) {
+    if (width > 1024) {
       return true;
     }
     return false;
