@@ -45,4 +45,47 @@ class HelperMethods {
       ),
     ];
   }
+
+  static List<Map<String, dynamic>> getCartItems() {
+    return [
+      {
+        "Phone Charger": "...",
+      },
+      {
+        "QTY 1 X 1000": "1000",
+      },
+      {
+        "Laptop Charger": "...",
+      },
+      {
+        "QTY 1 X 1000": "1200",
+      },
+      {
+        "Discount (10%)": "-120",
+      },
+      {
+        "Before Disc.": "RF 2200",
+      },
+      {
+        "Tax (18%)": "RF 374.4",
+      },
+      {
+        "After Disc.": "RF 2080",
+      },
+    ];
+  }
+
+  static BoxDecoration getBodyDecoration({
+    bool isDeskTop = false,
+  }) {
+    return BoxDecoration(
+      color: isDeskTop ? dashboardTransparentBg : Colors.white,
+      borderRadius: isDeskTop
+          ? null
+          : const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+    );
+  }
 }

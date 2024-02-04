@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hova_ai/core/constants/constants.dart';
 import 'package:hova_ai/core/helpers/helpers.dart';
 import 'package:hova_ai/features/products/presentation/bloc/product_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:hova_ai/features/products/presentation/bloc/product_state.dart';
 import 'package:hova_ai/features/products/presentation/widgets/button.dart';
 import 'package:hova_ai/features/products/presentation/widgets/card.dart';
 import 'package:hova_ai/features/products/presentation/widgets/cart.dart';
+import 'package:hova_ai/features/products/presentation/widgets/cart_view.dart';
 import 'package:hova_ai/features/products/presentation/widgets/icon_button.dart';
 import 'package:hova_ai/features/products/presentation/widgets/search_field.dart';
 import 'package:hovering/hovering.dart';
@@ -40,7 +42,11 @@ class _ProductsState extends State<Products> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: !HelperMethods.isDeskTop(width: width) ? _buildAppBar() : null,
+      appBar: !HelperMethods.isDeskTop(width: width)
+          ? _buildAppBar(
+              context: context,
+            )
+          : null,
       body: !HelperMethods.isDeskTop(width: width)
           ? _buildMobileBody(
               width: width,
@@ -61,7 +67,9 @@ class _ProductsState extends State<Products> {
   }
 }
 
-_buildAppBar() {
+_buildAppBar({
+  required BuildContext context,
+}) {
   return AppBar(
     centerTitle: true,
     leading: const IconButton(
@@ -77,7 +85,11 @@ _buildAppBar() {
         fontWeight: FontWeight.bold,
       ),
     ),
-    actions: const <Widget>[CustomCart()],
+    actions: <Widget>[
+      CustomCart(
+        onTap: () => context.pushNamed('cart'),
+      )
+    ],
   );
 }
 
@@ -130,7 +142,7 @@ Widget _buildMobileBody({
       if (state is ProductsDone) {
         return Container(
           padding: EdgeInsets.all(isDeskTop ? .0 : 16.0),
-          decoration: _buildBoxDecoration(isDeskTop: isDeskTop),
+          decoration: HelperMethods.getBodyDecoration(isDeskTop: isDeskTop),
           child: isDeskTop
               ? GridView.count(
                   crossAxisCount: 2,
@@ -398,8 +410,11 @@ Widget _buildDashboardContent({
   return SizedBox(
     width: double.infinity,
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _buildDashboardFistRow(height: height, width: width),
+        CartView(width: width, height: height),
       ],
     ),
   );
@@ -440,19 +455,5 @@ Widget _buildDeskTopBody({
         height: height,
       ),
     ],
-  );
-}
-
-BoxDecoration _buildBoxDecoration({
-  bool isDeskTop = false,
-}) {
-  return BoxDecoration(
-    color: isDeskTop ? dashboardTransparentBg : Colors.white,
-    borderRadius: isDeskTop
-        ? null
-        : const BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
-          ),
   );
 }
